@@ -1,111 +1,81 @@
 import React, { useState, useEffect } from 'react';
-import { FaHeart, FaRegHeart } from 'react-icons/fa';
-import confetti from 'canvas-confetti';
+import axios from 'axios';
+import api from '../Modules/Api';
 
-const colors = [
-  'text-yellow-400',
-  'text-purple-500',
-  'text-pink-500',
-  'text-blue-400',
-  'text-green-500',
-  'text-red-400',
-];
-
-const EventCard = ({ event }) => {
-  const [currentImage, setCurrentImage] = useState(0);
-  const [isFavorite, setIsFavorite] = useState(false);
-  const [randomColor, setRandomColor] = useState('');
-  const [hovered, setHovered] = useState(false);
-  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+const EventDisplay = () => {
+  const [events, setEvents] = useState([]);
 
   useEffect(() => {
-    const color = colors[Math.floor(Math.random() * colors.length)];
-    setRandomColor(color);
+    const fetchEvents = async () => {
+      try {
+        const response = await axios.get(`${api}event`, {
+          params: { page: 0 },
+        });
+        console.log(response.data); // Log the whole response to inspect its structure
+        if (response.data?.status) {
+          setEvents(response.data.result); // Assuming result contains an array of events
+        }
+      } catch (error) {
+        console.error('Failed to fetch events:', error);
+      }
+    };
+    
+
+    fetchEvents();
   }, []);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentImage((prev) => (prev + 1) % event.images.length);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, [event.images.length]);
-
-  useEffect(() => {
-    const countdown = setInterval(() => {
-      const diff = new Date(event.date) - new Date();
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const minutes = Math.floor((diff / (1000 * 60)) % 60);
-      const seconds = Math.floor((diff / 1000) % 60);
-      setTimeLeft({ days, hours, minutes, seconds });
-    }, 1000);
-    return () => clearInterval(countdown);
-  }, [event.date]);
-
-  const handleFavorite = () => {
-    setIsFavorite(!isFavorite);
-    // Party popper effect at the top of the card
-    confetti({
-      particleCount: 100,
-      spread: 70, // Adjust the origin to make confetti appear at the top
-    });
-  };
-
   return (
-    <div
-    className={`w-full sm:w-[40%] bg-white rounded-2xl shadow-lg p-4 mb-6 flex flex-col justify-between transition-transform hover:scale-[1.01] 
-      hover:shadow-[0_4px_15px_${randomColor}]`}>
-  
-    {/* Image Container */}
-    <div className="aspect-[16/9] w-full overflow-hidden rounded-xl mb-4">
-      <img
-        src={event.images[currentImage]}
-        alt="event"
-        className="w-full h-full object-cover transition-all duration-300"
-      />
-    </div>
-  
-    {/* Title */}
-    <h2 className={`text-2xl font-semibold mb-2 ${randomColor}`}>{event.title}</h2>
-  
-    {/* Description */}
-    <p
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      className="text-gray-600 text-sm overflow-hidden transition-all duration-300 h-12 hover:h-auto"
-    >
-      {hovered ? event.description : `${event.description.slice(0, 80)}...`}
-    </p>
-  
-    {/* Date & Timer */}
-    <div className="mt-4 flex items-center justify-between text-sm">
-      <div className="text-gray-600">
-        <p className="font-medium">Event Date:</p>
-        <p>{new Date(event.date).toLocaleDateString()}</p>
-      </div>
-      <div className="text-right">
-        <p className="font-medium">Starts In:</p>
-        <p>
-          {timeLeft.days}d {timeLeft.hours}h {timeLeft.minutes}m {timeLeft.seconds}s
-        </p>
+    <div className="min-h-screen bg-gray-100 p-10">
+      <h1 className="text-4xl font-bold text-center text-gray-800 mb-12">Upcoming Events</h1>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {events.length > 0 ? (
+          events.map((event, index) => (
+            <EventCard key={event._id || index} event={event} /> // Key fallback to index if _id is missing
+          ))
+        ) : (
+          <p className="text-gray-500 text-center col-span-full">No events found.</p>
+        )}
       </div>
     </div>
-  
-    {/* Distance & Cost */}
-    <div className="mt-4 flex items-center justify-between text-sm text-gray-600">
-      <p>Distance: <span className="font-medium">{event.distance} km</span></p>
-      <p>Cost: <span className="font-medium">₹{event.cost}</span></p>
-    </div>
-  
-    {/* Favorite Button */}
-    <div className="mt-4 text-right">
-      <button onClick={handleFavorite} className="text-red-500 text-xl">
-        {isFavorite ? <FaHeart /> : <FaRegHeart />}
-      </button>
-    </div>
-  </div>
-  
   );
 };
 
-export default EventCard;
+const EventCard = ({ event }) => {
+  return (
+    <div className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-all duration-300">
+      <div className="relative mb-6">
+        <div className="absolute top-0 left-0 bg-blue-500 text-white text-xs px-3 py-1 rounded-full">
+          {event.category || 'General'}
+        </div>
+        <h2 className="text-2xl font-semibold text-gray-800">{event.title}</h2>
+      </div>
+
+      <p className="text-gray-600 mb-4">{event.description}</p>
+
+      <div className="flex justify-between text-sm text-gray-500 mb-4">
+        <div>
+          <strong>Date:</strong> {new Date(event.eventDate).toLocaleDateString()}
+        </div>
+        <div>
+          <strong>Cost:</strong> ₹{event.cost}
+        </div>
+      </div>
+
+      <div className="flex justify-between text-sm text-gray-500">
+        <div>
+          <strong>Distance:</strong> {event.distance} km
+        </div>
+        <div>
+          <strong>Location:</strong> {event.location || 'Not available'}
+        </div>
+      </div>
+
+      <button className="mt-4 w-full py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition duration-300">
+        Join Event
+      </button>
+    </div>
+  );
+};
+
+export default EventDisplay;

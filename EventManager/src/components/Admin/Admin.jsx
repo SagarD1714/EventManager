@@ -93,8 +93,8 @@ const AdminForm = () => {
     <div className=''>
 
       {renderpage &&
-        <div className="mx-auto p-6 bg-white ">
-          <div className='flex justify-between/'>
+        <div className="mx-auto p-2 bg-gradient-to-r from-blue-500 via-purple-600 to-pink-500">
+          <div className='flex justify-around'>
             <div className='w-1/2 h-screen px-6 bg-gray-200 shadow-inner'>
               <Eventdata />
             </div>
@@ -168,6 +168,7 @@ const AdminForm = () => {
                   <button
                     type="button"
                     className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded"
+                    onClick={() => navigate('/reset')}
                   >
                     Reset Password
                   </button>

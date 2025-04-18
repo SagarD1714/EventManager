@@ -1,106 +1,110 @@
-import React from 'react'
-import Nav from './Nav'
-import EventCard from './landing/EventCard'
-import test1 from '../assets/test1.jpg';
-import test2 from '../assets/test2.jpg';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import Nav from '../components/Nav'; // Assuming you already have a Nav component
+import api from './Modules/Api';
+import Loader from '../assets/Loader';
 
-const testEvents = [
-  {
-    title: "ReactJS Bootcamp",
-    description: "Learn ReactJS from scratch and build amazing web applications.",
-    images: [test1, test2],
-    date: "2025-06-01T09:00:00",
-    distance: 15,
-    cost: 150,
-  },
-  {
-    title: "Node.js for Beginners",
-    description: "Join us to learn the basics of Node.js and how to build server-side applications.",
-    images: [test1, test2],
-    date: "2025-06-05T14:00:00",
-    distance: 20,
-    cost: 120,
-  },
-  {
-    title: "Full Stack Developer Meetup",
-    description: "A meetup for full-stack developers to network and share knowledge.",
-    images: [test1, test2],
-    date: "2025-07-10T18:00:00",
-    distance: 25,
-    cost: 180,
-  },
-  {
-    title: "UI/UX Design Workshop",
-    description: "A hands-on workshop to improve your UI/UX design skills and learn industry best practices.",
-    images: [test1, test2],
-    date: "2025-06-15T10:00:00",
-    distance: 30,
-    cost: 100,
-  },
-  {
-    title: "Blockchain and Cryptography Meetup",
-    description: "An event to explore the world of blockchain and cryptography with experts.",
-    images: [test1, test2],
-    date: "2025-06-25T13:30:00",
-    distance: 40,
-    cost: 250,
-  },
-  {
-    title: "Machine Learning Conference",
-    description: "Join the best minds in AI and ML to discuss the future of technology and data science.",
-    images: [test1, test2],
-    date: "2025-08-01T09:30:00",
-    distance: 50,
-    cost: 300,
-  },
-  {
-    title: "Cloud Computing Seminar",
-    description: "A seminar on cloud technologies and their applications in modern businesses.",
-    images: [test1, test2],
-    date: "2025-07-20T12:00:00",
-    distance: 60,
-    cost: 220,
-  },
-  {
-    title: "Frontend Developer Meetup",
-    description: "A meetup for frontend developers to discuss trends, tools, and technologies in web development.",
-    images: [test1, test2],
-    date: "2025-09-05T11:00:00",
-    distance: 35,
-    cost: 130,
-  },
-  {
-    title: "AI for Business Workshop",
-    description: "Learn how AI can be leveraged for business applications and improve business processes.",
-    images: [test1, test2],
-    date: "2025-07-30T15:00:00",
-    distance: 45,
-    cost: 260,
-  },
-  {
-    title: "Cybersecurity Awareness Session",
-    description: "A session to understand the basics of cybersecurity and how to protect your data.",
-    images: [test1, test2],
-    date: "2025-08-15T10:00:00",
-    distance: 10,
-    cost: 180,
-  },
-];
+const Home = () => {
+  const [data, setData] = useState([]); // State to hold the fetched data
+  const [loading, setLoading] = useState(true); // State to manage loading state
+  const [error, setError] = useState(null); // State to manage errors if any
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(api + 'event', {
+          params: { page: 0 }, // Sending page=0 as a parameter
+        });
+        if (response.data?.status) {
+          setData(response.data.result); // Assuming the response has a 'result' array
+        }
+      } catch (err) {
+        console.error('Error fetching data:', err);
+        setError('Failed to fetch data.');
+      } finally {
+        setLoading(false);
+      }
+    };
 
+    fetchData();
+  }, []); // Empty dependency array ensures this runs only once when the component mounts
 
-
-const Test = () => {
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col">
+    <div>
       <Nav />
-      <div className="flex flex-wrap justify-center gap-12">
-        {testEvents.map((event, index) => (
-          <EventCard key={index} event={event} />
-        ))}
-      </div>
+      <section className="relative">
+        {/* Static Color Section (70vh height) */}
+        <div className="w-full h-[70vh] bg-gradient-to-r from-blue-500 via-purple-600 to-pink-500 flex items-center justify-center text-white">
+          <div className="text-center">
+            <h1 className="text-4xl font-bold mb-4">Welcome to the Event Hub</h1>
+            <p className="text-lg">Discover exciting events and their details below</p>
+          </div>
+        </div>
+
+        {/* Content Section with Cards (white background) */}
+        <div className="bg-white p-6">
+          {/* Loading state */}
+          {loading && <div className="flex justify-center items-center h-full"><Loader /></div>}
+
+          {/* Error state */}
+          {error && <div className="text-red-500 text-center">{error}</div>}
+
+          {/* Display data */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {data.length > 0 ? (
+              data.map((item) => (
+                <div className="w-full p-4 shadow-gray-300 shadow-xl">
+                  <div className="relative w-full pb-[56.25%]"> {/* 16:9 aspect ratio */}
+                    <img
+                      src={item.coverImage}
+                      alt={item.title}
+                      className="absolute inset-0 w-full h-full object-cover rounded-md"
+                      style={{ maxHeight: '250px' }} // Adjust image size
+                    />
+                  </div>
+
+                  <h3 className="text-xl font-semibold mt-4">{item.title}</h3>
+
+                  <div className="mt-2">
+                    <textarea
+                      className="w-full p-2 mt-2 border border-gray-300 rounded-md resize-none"
+                      value={item.description}
+                      readOnly
+                      rows={2} // Adjust the number of rows as per your design
+                    />
+                  </div>
+
+                  <div className="mt-2 text-sm text-gray-500 flex justify-between items-center">
+                    <div>
+                      <p>
+                        <strong>Start Date:</strong> {new Date(item.startDate).toLocaleDateString()}
+                      </p>
+                      <p>
+                        <strong>End Date:</strong> {new Date(item.endDate).toLocaleDateString()}
+                      </p>
+                      <p>
+                        <strong>Location:</strong> {item.location || 'Not available'}
+                      </p>
+                      <p>
+                        <strong>Pincode:</strong> {item.pincode}
+                      </p>
+                    </div>
+                    <div>
+                      <button className='bg-blue-500 border-none px-2 py-2 rounded text-white'>
+                        Calculate Expenses
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div></div>
+            )}
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
 
-export default Test
+export default Home;
