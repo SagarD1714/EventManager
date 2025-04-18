@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useEffect } from 'react';
 import Api from '../Modules/Api';
+import Eventdata from './Eventdata';
 
 const AdminForm = () => {
   const [renderpage, setRenderpage] = useState(false);
@@ -17,7 +18,7 @@ const AdminForm = () => {
       const user = JSON.parse(userData);
       const token = user?.TOKEN;
       const username = user?.result?.username;
-  
+
       if (token && typeof username === 'string') {
         setUser(username);
         setToken(token);
@@ -34,7 +35,7 @@ const AdminForm = () => {
       navigate('/admin');
     }
   }, [navigate]);
-  
+
 
   const {
     register,
@@ -60,7 +61,7 @@ const AdminForm = () => {
         headers: {
           'Content-Type': 'multipart/form-data',
           'TOKEN': TOKEN,
-          'USERNAME':user
+          'USERNAME': user
         }
       });
 
@@ -72,14 +73,27 @@ const AdminForm = () => {
     }
   };
 
+  const Logout = () => {
+    // Clear localStorage/sessionStorage if you use it for auth
+    const conf = confirm("Are you sure to Log out ?")
+    if (conf) {
+      sessionStorage.clear()
+      // Optionally display a message
+      alert('You have been logged out!')
+      // Redirect to login or home page
+      navigate('/')
+    }
+  }
+
   return (
-    <div>
+    <div className=''>
 
       {renderpage &&
-        <div className="mx-auto p-6 bg-white">
+        <div className="mx-auto p-6 bg-white ">
           <div className='flex justify-between/'>
             <div className='w-1/2 h-screen p-6 bg-gray-200 shadow-inner'>
               All Event Data's
+              <Eventdata />
             </div>
             <div>
               <div className="max-w-xl mx-auto/ p-6 bg-white rounded shadow">
@@ -153,6 +167,13 @@ const AdminForm = () => {
                     className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded"
                   >
                     Reset Password
+                  </button>
+                  <button
+                    type="button"
+                    onClick={Logout}
+                    className="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded"
+                  >
+                    Log out
                   </button>
                 </form>
               </div>
