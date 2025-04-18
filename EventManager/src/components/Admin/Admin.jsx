@@ -75,6 +75,7 @@ const AdminForm = () => {
 
   const Logout = () => {
     // Clear localStorage/sessionStorage if you use it for auth
+
     const conf = confirm("Are you sure to Log out ?")
     if (conf) {
       sessionStorage.clear()
