@@ -47,7 +47,7 @@ const AdminForm = () => {
   const onSubmit = async (data) => {
     try {
       const formData = new FormData();
-      formData.append('name', data.name);
+      formData.append('pincode', data.pincode);
       formData.append('description', data.description);
       formData.append('startDate', data.startDate);
       formData.append('endDate', data.endDate);
@@ -70,6 +70,8 @@ const AdminForm = () => {
       reset();
     } catch (error) {
       console.error('Submit Error:', error.response?.data || error.message);
+      alert('please relogin');
+      navigate('/admin')
     }
   };
 
@@ -79,6 +81,7 @@ const AdminForm = () => {
     const conf = confirm("Are you sure to Log out ?")
     if (conf) {
       sessionStorage.clear()
+      localStorage.clear()
       // Optionally display a message
       alert('You have been logged out!')
       // Redirect to login or home page
@@ -92,8 +95,7 @@ const AdminForm = () => {
       {renderpage &&
         <div className="mx-auto p-6 bg-white ">
           <div className='flex justify-between/'>
-            <div className='w-1/2 h-screen p-6 bg-gray-200 shadow-inner'>
-              All Event Data's
+            <div className='w-1/2 h-screen px-6 bg-gray-200 shadow-inner'>
               <Eventdata />
             </div>
             <div>
@@ -103,9 +105,9 @@ const AdminForm = () => {
                 <form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data" className="space-y-4">
 
                   <input
-                    type="text"
-                    placeholder="Name"
-                    {...register('name', { required: 'Name is required' })}
+                    type="number"
+                    placeholder="Pin Code"
+                    {...register('pincode', { required: 'pincode is required' })}
                     className="w-full p-2 border rounded"
                   />
                   {errors.name && <span className="text-red-500">{errors.name.message}</span>}

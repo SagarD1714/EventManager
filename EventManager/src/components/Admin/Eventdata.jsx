@@ -9,6 +9,34 @@ const Eventdata = () => {
     const [events, setEvents] = useState([]);
     const [TOKEN, setToken] = useState();
     const [user, setUser] = useState();
+
+
+    useEffect(() => {
+        const userData = sessionStorage.getItem('user');
+        if (userData) {
+            const user = JSON.parse(userData);
+            const token = user?.TOKEN;
+            const username = user?.result?.username;
+
+            if (token && typeof username === 'string') {
+                setUser(username);
+                setToken(token);
+                // setRenderpage(true);
+                console.log('Token and username found');
+            } else {
+                // setRenderpage(false);
+                alert('Please login');
+                // navigate('/admin');
+            }
+        } else {
+            // setRenderpage(false);
+            alert('Please login');
+            // navigate('/admin');
+        }
+    },);
+
+
+
     // Function to fetch from server and cache
     const FetchData = async () => {
         const page = 0;
@@ -51,14 +79,29 @@ const Eventdata = () => {
     // Dummy delete function for now
     const DeleteEvent = (id, coverImage) => async () => {
         console.log('Deleting event:', id, coverImage);
-        const response = await axios.post(api + 'event', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-                'TOKEN': TOKEN,
-                'USERNAME': user
-            }
-        });
+
+        const formData = new FormData();
+        formData.append('id', id);
+        formData.append('coverImage', coverImage);
+
+        try {
+            const response = await axios.delete(api + 'event', {
+                data: formData,
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'TOKEN': TOKEN,
+                    'USERNAME': user
+                }
+            });
+
+            console.log('Deleted successfully:', response.data);
+            FetchData();
+            // Optionally refresh events here
+        } catch (error) {
+            console.error('Delete failed:', error.response?.data || error.message);
+        }
     };
+
 
     return (
         <div className="font-sans font-semibold py-6 min-h-screen">
@@ -90,7 +133,7 @@ const Eventdata = () => {
                             {/* Event Info */}
                             <div className="flex-1 min-w-[200px] break-words whitespace-pre-line">
                                 <p>
-                                    Event Name: <strong className="text-gray-700">{event.title}</strong>
+                                    Pin Code: <strong className="text-gray-700">{event.pincode}</strong>
                                 </p>
                                 <p>
                                     Event Title: <strong className="text-gray-700">{event.title}</strong>
