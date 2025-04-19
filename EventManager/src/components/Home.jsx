@@ -43,54 +43,65 @@ const Home = () => {
 
         {/* Content Section with Cards (white background) */}
         <div className="bg-white p-6">
-          {/* Loading state */}
-          {loading && <div className="flex justify-center items-center h-full"><Loader /></div>}
+        {/* Loading state */}
+        {loading && (
+          <div className="flex justify-center items-center h-full">
+            <Loader />
+          </div>
+        )}
 
           {/* Error state */}
           {error && <div className="text-red-500 text-center">{error}</div>}
 
-          {/* Display data */}
+          {/* Data Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {data.length > 0 ? (
-              data.map((item) => (
-                <div className="w-full p-4 shadow-gray-300 shadow-xl">
-                  <div className="relative w-full pb-[56.25%]"> {/* 16:9 aspect ratio */}
+              data.map((item, idx) => (
+                <div
+                  key={idx}
+                  className="bg-white border border-gray-200 rounded-xl overflow-hidden transition-all duration-300 hover:border-black"
+                >
+                  {/* Image */}
+                  <div className="relative w-full pb-[56.25%] bg-gray-100">
                     <img
                       src={item.coverImage}
                       alt={item.title}
-                      className="absolute inset-0 w-full h-full object-cover rounded-md"
-                      style={{ maxHeight: '250px' }} // Adjust image size
+                      className="absolute inset-0 w-full h-full object-cover"
                     />
                   </div>
 
-                  <h3 className="text-xl font-semibold mt-4">{item.title}</h3>
+                  {/* Card Body */}
+                  <div className="p-5">
+                    <h3 className="text-lg font-bold text-black mb-2">{item.title}</h3>
 
-                  <div className="mt-2">
-                    <textarea
-                      className="w-full p-2 mt-2 border border-gray-300 rounded-md resize-none"
-                      value={item.description}
-                      readOnly
-                      rows={2} // Adjust the number of rows as per your design
-                    />
-                  </div>
+                    <p className="text-sm text-gray-700 line-clamp-3 mb-3">
+                      {item.description}
+                    </p>
 
-                  <div className="mt-2 text-sm text-gray-500 flex justify-between items-center">
-                    <div>
+                    <div className="flex justify-between text-sm text-gray-600 mb-4">
+                    <div className="space-y-1">
                       <p>
-                        <strong>Start Date:</strong> {new Date(item.startDate).toLocaleDateString()}
+                        <span className="font-medium">Start:</span>{" "}
+                        {new Date(item.startDate).toLocaleDateString()}
                       </p>
                       <p>
-                        <strong>End Date:</strong> {new Date(item.endDate).toLocaleDateString()}
-                      </p>
-                      <p>
-                        <strong>Location:</strong> {item.location || 'Not available'}
-                      </p>
-                      <p>
-                        <strong>Pincode:</strong> {item.pincode}
+                        <span className="font-medium">End:</span>{" "}
+                        {new Date(item.endDate).toLocaleDateString()}
                       </p>
                     </div>
-                    <div>
-                      <button className='bg-blue-500 border-none px-2 py-2 rounded text-white'>
+                    <div className="text-right space-y-1">
+                      <p>
+                        <span className="font-medium">Location:</span>{" "}
+                        {item.location || "Not available"}
+                      </p>
+                      <p>
+                        <span className="font-medium">Pincode:</span> {item.pincode}
+                      </p>
+                    </div>
+                  </div>
+
+                    <div className="flex justify-end">
+                    <button className='bg-black text-white border-none px-2 py-2 rounded hover:bg-gradient-to-r hover:from-blue-500 hover:via-purple-500 hover:to-pink-500 transition-all duration-1000'>
                         Calculate Expenses
                       </button>
                     </div>
@@ -98,10 +109,13 @@ const Home = () => {
                 </div>
               ))
             ) : (
-              <div></div>
+              <div className="text-center text-gray-400 col-span-full">
+                No data available
+              </div>
             )}
           </div>
         </div>
+
       </section>
     </div>
   );

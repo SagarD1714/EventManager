@@ -108,77 +108,80 @@ const Eventdata = () => {
 
 
     return (
-        <div className="font-sans font-semibold py-2 min-h-screen/">
-            {/* Refresh Button */}
+        <div className="font-sans font-semibold py-6 px-4 min-h-screen bg-gray-50">
+  {/* Refresh Button */}
+  <button
+    className="border border-blue-400 text-white bg-blue-500 hover:bg-blue-600 active:scale-95 transition-transform px-5 py-2 rounded-md shadow-md mb-6"
+    onClick={FetchData}
+  >
+    Refresh
+  </button>
+
+  {/* Loader */}
+  {isLoading ? (
+    <Loader />
+  ) : (
+    <div className="overflow-auto h-[78vh] space-y-6 pr-2">
+      {events.map((event, index) => (
+        <div
+          key={event.id || index}
+          className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 p-5 rounded-xl border border-gray-200 shadow-sm bg-white hover:shadow-md transition-shadow"
+        >
+          {/* Thumbnail */}
+          <img
+            src={event.coverImage}
+            alt="event-thumbnail"
+            className="w-24 h-24 object-cover rounded-lg border border-gray-300"
+          />
+
+          {/* Event Info */}
+          <div className="flex-1 min-w-[200px] space-y-2 text-sm text-gray-800">
+            <p>
+              <span className="font-medium text-gray-500">Pin Code:</span>{' '}
+              <span className="text-gray-700">{event.pincode}</span>
+            </p>
+            <p>
+              <span className="font-medium text-gray-500">Title:</span>{' '}
+              <span className="text-gray-700">{event.title}</span>
+            </p>
+            <p>
+              <span className="font-medium text-gray-500">Date:</span>{' '}
+              <span className="text-gray-700">
+                {event.startDate} - {event.endDate}
+              </span>
+            </p>
+            <p>
+              <span className="font-medium text-gray-500">Location:</span>{' '}
+              <span className="text-gray-700">{event.location}</span>
+            </p>
+            <div>
+              <p className="font-medium text-gray-500 mb-1">Description:</p>
+              <textarea
+                className="w-full border border-gray-300 rounded-md p-2 text-gray-700 resize-y focus:outline-none focus:ring-2 focus:ring-blue-300 bg-gray-50"
+                value={event.description}
+                readOnly
+                rows={2}
+              />
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex gap-3 self-stretch md:self-auto">
+            {/* <button className="border border-blue-500 text-blue-600 bg-white hover:bg-blue-100 active:scale-95 transition-transform px-4 py-1 rounded-md">
+              Edit
+            </button> */}
             <button
-                className="border border-gray-400 text-white bg-blue-500 hover:bg-blue-600 active:scale-95 transition-transform px-4 py-2 rounded shadow-sm mb-4"
-                onClick={FetchData}
+              className="border border-red-500 text-red-600 bg-white hover:bg-red-100 active:scale-95 transition-transform px-4 py-1 rounded-md"
+              onClick={DeleteEvent(event.id, event.coverImage)}
             >
-                Refresh
+              Delete
             </button>
-
-            {/* Loader */}
-            {isLoading ? (
-                <Loader />
-            ) : (
-                <div className="overflow-auto h-[78vh] space-y-4">
-                    {events.map((event, index) => (
-                        <div
-                            key={event.id || index}
-                            className="border border-gray-300 bg-white p-4 rounded-lg shadow-md flex flex-wrap items-center justify-between gap-4"
-                        >
-                            {/* Thumbnail */}
-                            <img
-                                src={event.coverImage}
-                                alt="event-thumbnail"
-                                className="w-20 h-20 object-cover rounded border border-gray-300"
-                            />
-
-                            {/* Event Info */}
-                            <div className="flex-1 min-w-[200px] break-words whitespace-pre-line">
-                                <p>
-                                    Pin Code: <strong className="text-gray-700">{event.pincode}</strong>
-                                </p>
-                                <p>
-                                    Event Title: <strong className="text-gray-700">{event.title}</strong>
-                                </p>
-                                <p>
-                                    Event Date:{' '}
-                                    <strong className="text-gray-700">
-                                        {event.startDate} - {event.endDate}
-                                    </strong>
-                                </p>
-                                <p>
-                                    Event Location:{' '}
-                                    <strong className="text-gray-700">{event.location}</strong>
-                                </p>
-
-                                <p className="mt-2 mb-1 font-medium">Event Description:</p>
-                                <textarea
-                                    className="w-full border border-gray-300 rounded p-2 text-gray-700 resize-y focus:outline-none focus:ring-2 focus:ring-blue-300"
-                                    value={event.description}
-                                    readOnly
-                                    rows={1}
-                                />
-                            </div>
-
-                            {/* Action Buttons */}
-                            <div className="flex gap-3">
-                                {/* <button className="border border-blue-500 text-blue-600 bg-white hover:bg-blue-100 active:scale-95 transition-transform px-3 py-1 rounded">
-                                    Edit
-                                </button> */}
-                                <button
-                                    className="border border-red-500 text-red-600 bg-white hover:bg-red-100 active:scale-95 transition-transform px-3 py-1 rounded"
-                                    onClick={DeleteEvent(event.id, event.coverImage)}
-                                >
-                                    Delete
-                                </button>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            )}
+          </div>
         </div>
+      ))}
+    </div>
+  )}
+</div>
     );
 };
 

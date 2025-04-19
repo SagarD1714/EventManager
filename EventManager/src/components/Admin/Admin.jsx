@@ -93,95 +93,113 @@ const AdminForm = () => {
     <div className=''>
 
       {renderpage &&
-        <div className="mx-auto p-2 bg-gradient-to-r from-blue-500 via-purple-600 to-pink-500">
+        <div className="mx-auto p-2 bg-gray-700">
           <div className='flex justify-around'>
-            <div className='w-1/2 h-screen px-6 bg-gray-200 shadow-inner'>
-              <Eventdata />
-            </div>
+            
             <div>
-              <div className="max-w-xl mx-auto/ p-6 bg-white rounded shadow">
+            <div className="fixed top-0 left-0 h-screen w-full max-w-md p-6 bg-white overflow-y-auto">
 
-                <h2 className="text-2xl font-semibold mb-4">Admin CRUD Form</h2>
-                <form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data" className="space-y-4">
+              <h2 className="text-2xl font-bold text-center text-gray-800">Add New Event</h2>
 
-                  <input
-                    type="number"
-                    placeholder="Pin Code"
-                    {...register('pincode', { required: 'pincode is required' })}
-                    className="w-full p-2 border rounded"
-                  />
-                  {errors.name && <span className="text-red-500">{errors.name.message}</span>}
+              <form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data" className="space-y-4">
 
-                  <input
-                    type="text"
-                    placeholder="Title"
-                    {...register('title', { required: 'Title is required' })}
-                    className="w-full p-2 border rounded"
-                  />
-                  {errors.title && <span className="text-red-500">{errors.title.message}</span>}
+                <input
+                  type="number"
+                  placeholder="Pin Code"
+                  {...register('pincode', { required: 'Pincode is required' })}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+                {errors.pincode && <span className="text-red-500 text-sm">{errors.pincode.message}</span>}
 
-                  <textarea
-                    placeholder="Description"
-                    {...register('description', { required: 'Description is required' })}
-                    className="w-full p-2 border rounded"
-                  />
-                  {errors.description && <span className="text-red-500">{errors.description.message}</span>}
+                <input
+                  type="text"
+                  placeholder="Title"
+                  {...register('title', { required: 'Title is required' })}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+                {errors.title && <span className="text-red-500 text-sm">{errors.title.message}</span>}
 
-                  <input
-                    type="text"
-                    placeholder="Location"
-                    {...register('location', { required: 'Location is required' })}
-                    className="w-full p-2 border rounded"
-                  />
-                  {errors.location && <span className="text-red-500">{errors.location.message}</span>}
+                <textarea
+                  placeholder="Description"
+                  {...register('description', { required: 'Description is required' })}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+                {errors.description && <span className="text-red-500 text-sm">{errors.description.message}</span>}
 
-                  <label className="block text-sm font-medium">Start Date</label>
+                <input
+                  type="text"
+                  placeholder="Location"
+                  {...register('location', { required: 'Location is required' })}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+                {errors.location && <span className="text-red-500 text-sm">{errors.location.message}</span>}
+
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-medium text-gray-600">Start Date</label>
                   <input
                     type="date"
                     {...register('startDate', { required: 'Start date is required' })}
-                    className="w-full p-2 border rounded"
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                   />
-                  {errors.startDate && <span className="text-red-500">{errors.startDate.message}</span>}
+                  {errors.startDate && <span className="text-red-500 text-sm">{errors.startDate.message}</span>}
+                </div>
 
-                  <label className="block text-sm font-medium">End Date</label>
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-medium text-gray-600">End Date</label>
                   <input
                     type="date"
                     {...register('endDate', { required: 'End date is required' })}
-                    className="w-full p-2 border rounded"
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                   />
-                  {errors.endDate && <span className="text-red-500">{errors.endDate.message}</span>}
+                  {errors.endDate && <span className="text-red-500 text-sm">{errors.endDate.message}</span>}
+                </div>
 
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-medium text-gray-600">Upload Image</label>
                   <input
                     type="file"
                     accept="image/png, image/jpeg"
                     {...register('image', { required: 'Image is required' })}
-                    className="w-full"
+                    className="w-full text-gray-700"
                   />
-                  {errors.image && <span className="text-red-500">{errors.image.message}</span>}
+                  {errors.image && <span className="text-red-500 text-sm">{errors.image.message}</span>}
+                </div>
 
-                  <button
-                    type="submit"
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded"
-                  >
-                    Submit
-                  </button>
-                  <button
-                    type="button"
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded"
-                    onClick={() => navigate('/reset')}
-                  >
-                    Reset Password
-                  </button>
-                  <button
-                    type="button"
-                    onClick={Logout}
-                    className="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded"
-                  >
-                    Log out
-                  </button>
-                </form>
+                {/* Submit Button */}
+                <button
+                  type="submit"
+                  className="w-full bg-black text-white px-4 py-2 rounded-lg hover:bg-gradient-to-r hover:from-blue-500 hover:via-purple-500 hover:to-pink-500 transition-all duration-500"
+                >
+                  Submit
+                </button>
+
+                {/* Reset Password Button */}
+                <button
+                  type="button"
+                  onClick={() => navigate('/reset')}
+                  className="w-full bg-black text-white px-4 py-2 rounded-lg hover:bg-gradient-to-r hover:from-blue-500 hover:via-purple-500 hover:to-pink-500 transition-all duration-500"
+                >
+                  Reset Password
+                </button>
+
+                {/* Logout Button */}
+                <button
+                  type="button"
+                  onClick={Logout}
+                  className="w-full bg-black text-white px-4 py-2 rounded-lg hover:bg-gradient-to-r hover:from-red-500 hover:via-pink-500 hover:to-yellow-500 transition-all duration-500"
+                >
+                  Log out
+                </button>
+                
+              </form>
               </div>
 
+
+            </div>
+            <div className="flex-1 h-screen bg-white shadow-inner px-6 overflow-hidden ml-120">
+              <div className="h-full overflow-y-auto">
+                <Eventdata />
+              </div>
             </div>
 
           </div>
