@@ -78,33 +78,37 @@ const Eventdata = () => {
 
     // Dummy delete function for now
     const DeleteEvent = (id, coverImage) => async () => {
-        console.log('Deleting event:', id, coverImage);
 
-        const formData = new FormData();
-        formData.append('id', id);
-        formData.append('coverImage', coverImage);
+        const cnf = confirm("Are you sure to delete ?");
+        if (cnf) {
+            console.log('Deleting event:', id, coverImage);
 
-        try {
-            const response = await axios.delete(api + 'event', {
-                data: formData,
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    'TOKEN': TOKEN,
-                    'USERNAME': user
-                }
-            });
+            const formData = new FormData();
+            formData.append('id', id);
+            formData.append('coverImage', coverImage);
 
-            console.log('Deleted successfully:', response.data);
-            FetchData();
-            // Optionally refresh events here
-        } catch (error) {
-            console.error('Delete failed:', error.response?.data || error.message);
+            try {
+                const response = await axios.delete(api + 'event', {
+                    data: formData,
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        'TOKEN': TOKEN,
+                        'USERNAME': user
+                    }
+                });
+
+                console.log('Deleted successfully:', response.data);
+                FetchData();
+                // Optionally refresh events here
+            } catch (error) {
+                console.error('Delete failed:', error.response?.data || error.message);
+            }
         }
     };
 
 
     return (
-        <div className="font-sans font-semibold py-6 min-h-screen">
+        <div className="font-sans font-semibold py-2 min-h-screen/">
             {/* Refresh Button */}
             <button
                 className="border border-gray-400 text-white bg-blue-500 hover:bg-blue-600 active:scale-95 transition-transform px-4 py-2 rounded shadow-sm mb-4"
@@ -160,9 +164,9 @@ const Eventdata = () => {
 
                             {/* Action Buttons */}
                             <div className="flex gap-3">
-                                <button className="border border-blue-500 text-blue-600 bg-white hover:bg-blue-100 active:scale-95 transition-transform px-3 py-1 rounded">
+                                {/* <button className="border border-blue-500 text-blue-600 bg-white hover:bg-blue-100 active:scale-95 transition-transform px-3 py-1 rounded">
                                     Edit
-                                </button>
+                                </button> */}
                                 <button
                                     className="border border-red-500 text-red-600 bg-white hover:bg-red-100 active:scale-95 transition-transform px-3 py-1 rounded"
                                     onClick={DeleteEvent(event.id, event.coverImage)}

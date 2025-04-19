@@ -7,6 +7,7 @@ import Home from './components/Home'
 import Login from './components/SignUpPage/Login'
 import Signup from './components/SignUpPage/Signup'
 import AdminPage from './components/Admin/Admin'
+import Reset from './components/SignUpPage/Reset';
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
           <Route path="/admin-page" element={<AdminPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/reset" element={<Reset />} />
         </Routes>
       </Router>
     </>
