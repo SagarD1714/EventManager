@@ -94,13 +94,13 @@ const Login = () => {
               Log In
             </button>
           </form>
-          <p className="mt-4 text-sm text-center text-gray-600">
+          {/* <p className="mt-4 text-sm text-center text-gray-600">
             Don’t have an account?{' '}
             <Link to="/signup" className="text-purple-700 hover:underline">
               Sign Up
             </Link>
 
-          </p>
+          </p> */}
         </div>
       </main>
       {loading &&

@@ -23,7 +23,7 @@ const Nav = () => {
       {/* Auth Buttons */}
       <div className="space-x-4">
       <Link to="/" className="hover:text-gray-300">Home</Link>
-        <Link to="/enterprise" className="hover:text-gray-300">Contacts</Link>
+        {/* <Link to="/enterprise" className="hover:text-gray-300">Contacts</Link> */}
         <Link to="/pricing" className="hover:text-gray-300">Upcoming Events</Link>
         <Link to="/login" className="bg-white text-black font-semibold px-4 py-2 rounded-md hover:bg-gray-200">Log in</Link>
         {/* <Link 

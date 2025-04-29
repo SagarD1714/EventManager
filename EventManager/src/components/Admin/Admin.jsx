@@ -45,6 +45,12 @@ const AdminForm = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
+    // ✅ Check if endDate is earlier than startDate
+    if (new Date(data.endDate) <= new Date(data.startDate)) {
+      alert('End date cannot be earlier or equal to start date.');
+      return; // 🚫 Prevent API call
+    }
+  
     try {
       const formData = new FormData();
       formData.append('pincode', data.pincode);
@@ -54,8 +60,8 @@ const AdminForm = () => {
       formData.append('location', data.location);
       formData.append('title', data.title);
       formData.append('image', data.image[0]);
-
-      console.log(TOKEN, user)
+  
+      console.log(TOKEN, user);
       const api = Api;
       const response = await axios.post(api + 'event', formData, {
         headers: {
@@ -64,16 +70,17 @@ const AdminForm = () => {
           'USERNAME': user
         }
       });
-
+  
       console.log('Success:', response.data);
       alert('Data submitted successfully!');
       reset();
     } catch (error) {
       console.error('Submit Error:', error.response?.data || error.message);
       alert('please relogin');
-      navigate('/admin')
+      navigate('/admin');
     }
   };
+  
 
   const Logout = () => {
     // Clear localStorage/sessionStorage if you use it for auth
@@ -197,7 +204,7 @@ const AdminForm = () => {
 
             </div>
             <div className="flex-1 h-screen bg-white shadow-inner px-6 overflow-hidden ml-120">
-              <div className="h-full overflow-y-auto">
+              <div className="h-full overflow-y-auto min-w-[300px] w-full">
                 <Eventdata />
               </div>
             </div>
