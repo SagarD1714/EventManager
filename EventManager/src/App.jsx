@@ -8,6 +8,7 @@ import Login from './components/SignUpPage/Login'
 import Signup from './components/SignUpPage/Signup'
 import AdminPage from './components/Admin/Admin'
 import Reset from './components/SignUpPage/Reset';
+import Expense from './components/landing/Expense';
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/reset" element={<Reset />} />
+          <Route path="/expense" element={<Expense />} />
         </Routes>
       </Router>
     </>
