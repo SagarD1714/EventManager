@@ -9,6 +9,7 @@ import Signup from './components/SignUpPage/Signup'
 import AdminPage from './components/Admin/Admin'
 import Reset from './components/SignUpPage/Reset';
 import Expense from './components/landing/Expense';
+import EventInfo from './components/Admin/EventInfo';
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/reset" element={<Reset />} />
           <Route path="/expense" element={<Expense />} />
+          <Route path="/event-info" element={<EventInfo />} />
         </Routes>
       </Router>
     </>

@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Api from '../Modules/Api';
 import Loader from '../../assets/Loader';
+import { useNavigate } from 'react-router-dom';
+
 
 const Eventdata = () => {
+  const navigate = useNavigate();
   const api = Api;
   const [isLoading, setIsLoading] = useState(false);
   const [events, setEvents] = useState([]);
@@ -111,10 +114,16 @@ const Eventdata = () => {
     <div className="font-sans font-semibold py-6 px-4 min-h-screen bg-gray-50 win-w-[300px]">
       {/* Refresh Button */}
       <button
-        className="border border-blue-400 text-white bg-blue-500 hover:bg-blue-600 active:scale-95 transition-transform px-5 py-2 rounded-md shadow-md mb-6"
+        className="border border-blue-400 cursor-pointer text-white bg-blue-500 hover:bg-blue-600 active:scale-95 transition-transform px-5 py-2 rounded-md shadow-md mb-6"
         onClick={FetchData}
       >
         Refresh
+      </button>
+      <button
+        className="border border-blue-400 cursor-pointer text-white bg-blue-500 hover:bg-blue-600 active:scale-95 transition-transform px-5 py-2 rounded-md shadow-md mb-6 mx-3"
+        onClick={() => navigate('/event-info')}
+      >
+        Event info
       </button>
 
       {/* Loader */}
