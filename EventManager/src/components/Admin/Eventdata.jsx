@@ -100,7 +100,7 @@ const Eventdata = () => {
       endDate: event.endDate,
       description: event.description,
       coverImage: event.coverImage,
-      image: null,
+      // image: null,
     });
     setShowEditForm(true);
   };
@@ -114,28 +114,34 @@ const Eventdata = () => {
 
   const handleUpdate = async () => {
     try {
+      console.log("Edit Data State:", editData);
+
       const formData = new FormData();
       formData.append('id', editData.id);
-      formData.append('title', editData.title);
-      formData.append('location', editData.location);
-      formData.append('pincode', editData.pincode);
-      formData.append('startDate', editData.startDate);
-      formData.append('endDate', editData.endDate);
-      formData.append('description', editData.description);
+      formData.append('title', editData.title || '');
+      formData.append('location', editData.location || '');
+      formData.append('pincode', editData.pincode || '');
+      formData.append('startDate', editData.startDate || '');
+      formData.append('endDate', editData.endDate || '');
+      formData.append('description', editData.description || '');
 
-      if (editData.image) {
-        formData.append('image', editData.image);
+      if (editData.coverImage) {
+        formData.append('coverImage', editData.coverImage);
       }
 
+      // Debug actual formData
+      for (let [key, value] of formData.entries()) {
+        console.log(`${key}:`, value);
+      }
 
-      console.log(formData)
-      const response = await axios.post(`${api}event`, formData, {
+      const response = await axios.post(`${api}updateEvent`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          TOKEN: TOKEN,
+          TOKEN,
           USERNAME: user,
         },
       });
+
       console.log(response.data)
       alert('Event updated successfully');
       setShowEditForm(false);
@@ -145,6 +151,7 @@ const Eventdata = () => {
       alert('Update failed');
     }
   };
+
 
   return (
     <div className="font-sans font-semibold py-6 px-4 min-h-screen bg-gray-50">
